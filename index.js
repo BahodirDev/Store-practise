@@ -1,7 +1,6 @@
 const express = require("express");
 const app = express();
 const IndexRoute = require('./src/Routes/IndexRoute');
-const pool  = require('./config/db')
 require("dotenv").config();
 
 
