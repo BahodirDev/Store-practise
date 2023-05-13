@@ -43,7 +43,7 @@ create table users(
     user_name varchar(30) null,
     user_nomer numeric(30) not null,
     user_role numeric(20) NOT NULL DEFAULT 0, 
-    user_login varchar(20) not null,
+    user_login varchar(20) not null unique,
     user_password varchar(60) not null,
     user_createdat TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
