@@ -17,6 +17,21 @@ async function getUsersModel() {
 
 async function postUsersModel(body) {
     const { user_name, user_nomer, user_login, user_password, user_role } = body;
+
+    const prevQuery = `
+        select *  from users where user_login = $1
+    `;
+
+    let isExist = await queryBuilder(prevQuery,user_login);
+    if(isExist.rows.length){
+        return {
+            action: true,
+            status: 500,
+            error: error.USER_ALREADY_EXIST,
+            message: "Bunday foydalanuvchi mavjud"
+        }
+    }
+ 
     const querySelectUser = `
    insert 
    into 
@@ -26,7 +41,7 @@ async function postUsersModel(body) {
     returning *
  `;
 
-    const selectUser = await queryBuilder(querySelectUser, user_name, user_nomer, user_role, user_login, user_password);
+    const selectUser = await queryBuilder(querySelectUser, user_name?.trim(), user_nomer, user_role, user_login?.trim(), user_password?.trim());
     console.log(selectUser?.rows[0]);
     if (!selectUser?.rows?.length) {
         return {
@@ -44,6 +59,7 @@ async function patchUsersModel(body, params) {
     const { user_id } = params;
     const { user_name, user_nomer, user_login, user_password, user_role } = body;
 
+
     // first I find if user exist
     const querySelectUser1 = `
     select * from users
@@ -53,7 +69,7 @@ async function patchUsersModel(body, params) {
     // bir xil format topish zarur
 
     const findUser = await queryBuilder(querySelectUser1, user_id);
-    console.log('user=>', findUser?.rows[0]);
+    
     if (!findUser.rows.length) {
         return {
             action: true,
@@ -62,6 +78,24 @@ async function patchUsersModel(body, params) {
             message: `${user_id} id dagi foydalanuvchi topilmadi`
         }
     } else {
+
+
+        const prevQuery = `
+        select *  from users where user_login = $1
+    `;
+
+    let isExist = await queryBuilder(prevQuery,user_login);
+    if(isExist.rows.length){
+        return {
+            action: true,
+            status: 500,
+            error: error.USER_ALREADY_EXIST,
+            message: "Bunday foydalanuvchi mavjud"
+        }
+    }
+
+
+
         // login va passwordni tekshirish kerak
         const querySelectUser = `
     update  
@@ -74,9 +108,9 @@ async function patchUsersModel(body, params) {
      where user_id = $6
      returning *
   `;
-        const selectUser = await queryBuilder(querySelectUser, user_name ? user_name : findUser.rows[0]?.user_name, user_nomer ? user_nomer : findUser.rows[0]?.user_nomer, user_role ? user_role : findUser.rows[0]?.user_role, user_login ? user_login : findUser.rows[0]?.user_login, user_password ? user_password : findUser.rows[0]?.user_password, user_id);
+        const selectUser = await queryBuilder(querySelectUser, user_name ? user_name.trim() : findUser.rows[0].user_name, user_nomer ? user_nomer : findUser.rows[0].user_nomer, user_role ? user_role : user_role >= 0 ? user_role : findUser.rows[0].user_role, user_login ? user_login.trim() : findUser.rows[0].user_login, user_password ? user_password.trim() : findUser.rows[0].user_password, user_id);
 
-        return selectUser?.rows;
+        return selectUser?.rows[0];
     }
 
 }

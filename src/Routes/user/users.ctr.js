@@ -22,8 +22,16 @@ async function postUsersCtr(req, res) {
 
 async function patchtUsersCtr(req, res) {
     const model = await patchUsersModel(req.body, req.params);
-    console.log(model);
-    res.send('patch dan salom');
+    if (model.action) {
+        delete model.action;
+        res.status(model.status).json(model);
+    } else {
+        res.status(201).json({
+            status: 201,
+            message: 'Foydalanuvchi o`zgartirildi',
+            data: model,
+        });
+    }
 }
 
 async function deletetUsersCtr(req, res) {
