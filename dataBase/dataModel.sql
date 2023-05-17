@@ -53,12 +53,11 @@ drop table if exists currency cascade;
 create table currency(
     currency_id uuid DEFAULT uuid_generate_v4 () primary key,
     currency_name varchar(30) not null,
-    currency_amount numeric(15),
-    minPer numeric(15) not null default 8,
-    maxPer numeric(15) not null default 10
+    currency_amount numeric(15,3),
+    minPer numeric(5,2) not null default 8,
+    maxPer numeric(5,2) not null default 10
 );
 
--- products table
 drop table if exists products cascade;
 create table products(
     products_id uuid DEFAULT uuid_generate_v4 () primary key,

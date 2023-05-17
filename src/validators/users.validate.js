@@ -1,5 +1,5 @@
-const { error } = require('../../../config/error');
-const queryBuilder = require('../../../config/db');
+const { error } = require('../../config/error');
+const queryBuilder = require('../../config/db');
 
 async function createUsersValidation(req, res, next) {
     const body = req.body;

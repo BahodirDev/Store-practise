@@ -1,4 +1,4 @@
-const { createUsersValidation, patchUsersValidation } = require('../validators/users.validate');
+const { createUsersValidation, patchUsersValidation } = require('../../validators/users.validate');
 const { getUsersCtr, postUsersCtr, patchtUsersCtr, deletetUsersCtr} = require('./users.ctr');
 
 const route = require('express').Router();
