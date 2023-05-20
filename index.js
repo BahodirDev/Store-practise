@@ -7,7 +7,7 @@ require("dotenv").config();
 app.use(express.json())
 
 // routes
-app.use('/',IndexRoute)
+app.use('/api',IndexRoute)
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
